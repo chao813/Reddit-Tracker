@@ -19,8 +19,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+
+#print(os.environ.get('DJANGO_KEY'))
+#print(os.environ.get('EMAIL_PASSWORD'))
+#print(os.environ.get('EMAIL_USER'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'p#wvb8p@acj7crexl9@*$v&hww$mvqv-hvkp^0&qg42!h5m7oi'
+SECRET_KEY = os.environ.get('DJANGO_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -135,7 +140,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'contact.reddittracker@gmail.com'
-print("Email Host: {}".format(os.environ.get('EMAIL_PASSWORD')))
-EMAIL_HOST_PASSWORD = 'reddittracker'
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
