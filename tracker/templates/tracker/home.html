@@ -1,0 +1,221 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<!-- Template by Quackit.com -->
+<!-- Images by various sources under the Creative Commons CC0 license and/or the Creative Commons Zero license. 
+Although you can use them, for a more unique website, replace these images with your own. -->
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Reddit Tracker</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'tracker/assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="{% static 'tracker/assets/css/custom.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom Fonts from Google -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav id="siteNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <span class="glyphicon glyphicon-fire"></span> 
+                    Reddit Tracker
+                </a>
+            </div>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active">
+                        <a href="#home">Home</a>
+                    </li>
+                    <li>
+                        <a href="#features">Features</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="#contact">Contact</a>
+                    </li>
+                </ul>
+                
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1>Reddit Tracker</h1>
+                <p>Track all your keywords in different subreddits</p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="btn btn-primary btn-lg">Profile</a>
+                {% else %}
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Join Now</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Intro Section -->
+
+    <!-- Content 1 -->
+    <section class="content" id="features">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img class="img-responsive img-circle center-block" src="{% static 'tracker/assets/images/micriphone.jpg' %}" alt="">
+                </div>
+                <div class="col-sm-6">
+                    <h2 class="section-header">Real Time Results</h2>
+                    <p class="lead text-muted">Monitor submissions and comments with your specific keyword or phrase in a subreddit. Be the first to see each mention.</p>
+                    
+                </div>                
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Content 2 -->
+     <section class="content content-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2 class="section-header">Alerts</h2>
+                    <p class="lead text-light">Choose from several ways of receiving immediate alerts once theres a new match, including text messages, emails, or pop ups. </p>
+                </div>    
+                <div class="col-sm-6">
+                    <img class="img-responsive img-circle center-block" src="{% static 'tracker/assets/images/phone.jpg' %}" alt="">
+                </div>            
+                
+            </div>
+        </div>
+    </section>    
+
+    <!-- Content 3 -->
+     <section class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img class="img-responsive img-circle center-block" src="{% static 'tracker/assets/images/share.jpg' %}" alt="">
+                </div>      
+                <div class="col-sm-6">
+                    <h2 class="section-header">Share Results</h2>
+
+                    <p class="lead text-muted">Results are private by default. Have the option to share your results with a click of a button.</p>
+                </div>    
+                       
+                
+            </div>
+        </div>
+    </section>   
+
+    <!-- Promos -
+    <div class="container-fluid">
+        <div class="row promo">
+            <a href="#">
+                <div class="col-md-4 promo-item item-1">
+                    <h3>
+                        Unleash
+                    </h3>
+                </div>
+            </a>
+            <a href="#">
+                <div class="col-md-4 promo-item item-2">
+                    <h3>
+                        Synergize
+                    </h3>
+                </div>
+            </a>
+            
+            <a href="#">
+                <div class="col-md-4 promo-item item-3">
+                    <h3>
+                        Procrastinate
+                    </h3>
+                </div>
+            </a>
+        </div>
+    </div>--><!-- /.container-fluid -->
+
+    
+    <!-- Footer -->
+    <footer class="page-footer">
+    
+        <!-- Contact Us -->
+        <div class="contact" id="contact">
+            <div class="container">
+                <h2 class="section-heading">Contact Us</h2>
+                <p><span class="glyphicon glyphicon-home"></span><br> https://yuans.site</p>
+                <p><span class="glyphicon glyphicon-envelope"></span><br> contact.reddittracker@gmail.com</p>
+            </div>
+        </div>
+            
+        <!-- Copyright etc -->
+        <div class="small-print">
+            <div class="container">
+                <p>Copyright &copy; yuanchao 2018</p>
+            </div>
+        </div>
+        
+    </footer>
+
+    <!-- jQuery -->
+    <script src="{% static 'tracker/assets/js/jquery-1.11.3.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'tracker/assets/js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'tracker/assets/js/jquery.easing.min.js' %}"></script>
+    
+    <!-- Custom Javascript -->
+    <script src="{% static 'tracker/assets/js/custom.js' %}"></script>
+
+</body>
+
+</html>
