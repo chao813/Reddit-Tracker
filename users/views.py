@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UserInputForm
 from django.contrib.auth.decorators import login_required
+import os
 
 import requests
 from bs4 import BeautifulSoup
@@ -172,8 +173,8 @@ def scanposts(keyword, urls, email, alert, user):
 	                    server.quit()
 
 	                if alert.lower() == "sms":
-	                    accountSid = "AC066aedd329d53eb2f0d95a7a506400c1"
-	                    authToken = "3da717384f0f9e6a1c116dcf6e019172"
+	                    accountSid = os.environ.get('TWILIO_SID')
+	                    authToken = os.environ.get('TWILIO_AUTH')
 	                    twilioClient = Client(accountSid, authToken)
 	                    myTwilioNumber = "+17652957391"
 	                    destCellPhone = "{}".format(email)
@@ -229,8 +230,8 @@ def scancomments(keyword, urls, email, alert, user):
 	                    server.quit()
 
 	                if alert.lower() == "sms":
-	                    accountSid = "AC066aedd329d53eb2f0d95a7a506400c1"
-	                    authToken = "3da717384f0f9e6a1c116dcf6e019172"
+	                    accountSid = os.environ.get('TWILIO_SID')
+	                    authToken = os.environ.get('TWILIO_AUTH')
 	                    twilioClient = Client(accountSid, authToken)
 	                    myTwilioNumber = "+17652957391"
 	                    destCellPhone = "{}".format(email)

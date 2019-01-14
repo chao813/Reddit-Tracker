@@ -23,9 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #print(os.environ.get('DJANGO_KEY'))
 #print(os.environ.get('EMAIL_PASSWORD'))
 #print(os.environ.get('EMAIL_USER'))
+#print(os.environ.get('TWILIO_SID'))
+#print(os.environ.get('TWILIO_AUTH'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_KEY')
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
