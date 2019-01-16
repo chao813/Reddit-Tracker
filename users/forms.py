@@ -29,4 +29,6 @@ class ProfileUpdateForm(forms.ModelForm):
 class UserInputForm(forms.ModelForm):
 	class Meta:
 		model = Input
-		fields = ['keyword', 'subreddit', 'scan_type', 'enter_email_or_phone_number']
+		fields = ['keyword', 'subreddit', 'scan_type', 'enter_email_or_phone_number', 'disable']
+
+

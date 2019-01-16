@@ -71,7 +71,7 @@ Although you can use them, for a more unique website, replace these images with 
     <header>
         <div class="header-content">
             <div class="header-content-inner">
-                <h1>Reddit Tracker</h1>
+                <h1>User Profile</h1>
                 <p>Track all your keywords in different subreddits</p>
                 <a href="{% url 'logout' %}" class="btn btn-primary btn-lg">Log Out</a>
             </div>
@@ -99,10 +99,65 @@ Although you can use them, for a more unique website, replace these images with 
                         {% csrf_token %}
                         <fieldset class="form-group">
                             <legend class="border-bottom mb-4">Enter Keyword and Subreddit</legend>
-                            {{ i_form|crispy }}
+                            {{ i_form | crispy }}
+                            
                         </fieldset>
                         <div>
                             <button type="submit">Start Tracking</button>
+                            <br>
+                            <br>   
+
+                        </div>
+                    </form>
+                </div>    
+                          
+                
+            </div>
+        </div>
+
+
+        <div class="container">    
+            <div class="row">
+                <div class="col-sm-6">
+                    <form method="POST" name="update_button" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">Tracking History</legend>
+                            <table border="1" width="600">
+                                <tr>
+                                
+                                <td><b>Keyword</b></td>
+                                <td><b>Subreddit</b></td>
+                                <td><b>Post/Comment</b></td>
+                                <td><b>Active</b></td>
+                                
+                                </tr>
+
+                                {% for elements in keywordtable %}
+                                <tr>
+                                <td>
+                                    {{ elements.0 }}
+                                </td>
+                                <td>
+                                    
+                                    {{ elements.1 }}
+                                </td>
+                                <td>
+                                    {{ elements.2}}
+                                </td>
+                                <td>
+                                    {{ elements.3 }}
+                                </td>
+                                </tr>
+                                {% endfor %}
+                               
+                               
+                             </table>
+
+                            
+                        </fieldset>
+                        <div>
+                            
                             <br>
                             <br>   
 
@@ -122,7 +177,7 @@ Although you can use them, for a more unique website, replace these images with 
           <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Profile Info</legend>
+                <legend class="border-bottom mb-4">Update Profile Information</legend>
                 {{ u_form|crispy }}
                 {{ p_form|crispy }}
             </fieldset>

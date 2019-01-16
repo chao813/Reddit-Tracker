@@ -29,6 +29,5 @@ class Input(models.Model):
 	subreddit = models.CharField(blank=False, null=True, max_length = 80)
 	scan_type = models.CharField(max_length= 20, default=False, choices=(('post', 'Post'),('comment','Comment')))
 	enter_email_or_phone_number = models.CharField(blank=False, null=True, max_length = 80, help_text='Phone numbers have to be in +1XXXXXXXXXX format')
-
-
+	disable = models.BooleanField(default=False, help_text='Check box to disable tracking')
 

@@ -13,6 +13,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from twilio.rest import Client
 
+#from .models import Input
+
 
 
 # Create your views here.
@@ -47,25 +49,51 @@ def profile(request):
 	if i_form.is_valid():
 		instance = i_form.save(commit=False)
 		instance.user = request.user		
-		output = main(instance.keyword, instance.subreddit, instance.scan_type, instance.enter_email_or_phone_number, instance.user.username)
+		output = main(instance.keyword, instance.subreddit, instance.scan_type, instance.enter_email_or_phone_number, instance.user.username, instance.disable)
 		instance.save()
 
+	keywordtable = accessinfo(request.user.username)
 
+
+	#if(request.POST.get('update_button')):
+	#	keywordtable = accessinfo(request.user.username)
+		
 	context = {
 		'u_form' : u_form,
 		'p_form' : p_form,
-		'i_form' : i_form
+		'i_form' : i_form,
+		'keywordtable' : keywordtable,
 	}
+
+
 
 	return render(request, 'users/profile.html', context)
 
 
-def main(keyword, subreddit, scan_type, email, user):
+
+def accessinfo(user):
+	connect = sqlite3.connect('db.sqlite3')
+	c = connect.cursor()
+	create_keywordTable()
+
+	c.execute("SELECT * FROM Keywords WHERE user=?",(user,))
+	
+	rows = c.fetchall()
+	keywordtable =[]
+	if rows:
+		for row in rows:
+			keywordtable.append((row[1],row[2], row[3],row[5]))
+		
+
+	return keywordtable
+
+def main(keyword, subreddit, scan_type, email, user, disable):
 	print(keyword)
 	print(subreddit)
 	print(scan_type)
 	print(email)
 	print(user)
+	print(disable)
 
 	if not re.match('\S+@\S+', email):
 		alert = 'sms'
@@ -95,29 +123,46 @@ def main(keyword, subreddit, scan_type, email, user):
 	    if url+"/comments" in href or url_s+"/comments " in href:
 	        urls.append(href)  
 
+	if disable == False:
+		active = 'Yes'
+	if disable == True:
+		active = 'No'
 
-	        
-	x = insert_keyword(keyword, subreddit, user)
-	if scan_type == "post":
+	update_keyword(keyword, subreddit, user, active, scan_type)
+	insert_keyword(keyword, subreddit, user, active, scan_type)
+	if scan_type == "post" and disable == False:
 	    scanposts(keyword, urls, email, alert, user)
-	elif scan_type == "comment":
+	elif scan_type == "comment" and disable == False:
 	    scancomments(keyword, urls, email, alert, user)
 
-def insert_keyword(keyword, subreddit, user):
+
+def update_keyword(keyword, subreddit, user, active, scan):
+	connect = sqlite3.connect('db.sqlite3')
+	c = connect.cursor()
+	c.execute("UPDATE Keywords SET active=? WHERE keyword=? and subreddit=? and user=? and scan=?", (active, keyword, subreddit,user, scan))
+	connect.commit()
+
+
+
+def insert_keyword(keyword, subreddit, user, active, scan):
 	connect = sqlite3.connect('db.sqlite3')
 	c = connect.cursor()
 
-	c.execute("INSERT OR IGNORE INTO Keywords(keyword, subreddit, user) VALUES(?, ?, ?)", (keyword, subreddit, user))
+	c.execute("SELECT * FROM Keywords WHERE keyword=? and subreddit=? and user=? and active=? and scan=?", (keyword, subreddit, user, active, scan))
+	entry = c.fetchone()
+
+	if entry is None:
+		c.execute("INSERT INTO Keywords(keyword, subreddit, user, active, scan) VALUES(?, ?, ?, ?, ?)", (keyword, subreddit, user, active, scan))
+	
 	connect.commit()
-	x = 0
-	return (x+1)
+	
 
 
 
 def create_keywordTable():
 	connect = sqlite3.connect('db.sqlite3')
 	c = connect.cursor()
-	c.execute('CREATE TABLE IF NOT EXISTS Keywords(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, keyword TEXT NOT NULL DEFAULT "" UNIQUE, subreddit TEXT NOT NULL DEFAULT "" UNIQUE, user TEXT NOT NULL DEFAULT "" UNIQUE, active INT NOT NULL DEFAULT "1")')
+	c.execute('CREATE TABLE IF NOT EXISTS Keywords(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, keyword TEXT NOT NULL, subreddit TEXT NOT NULL, scan TEXT NOT NULL, user TEXT NOT NULL, active TEXT NOT NULL DEFAULT "Yes")')
 
 
 def create_commentTable():
@@ -143,7 +188,7 @@ def scanposts(keyword, urls, email, alert, user):
 	    print(url)
 	    for i in soup.find_all('div', attrs={"data-test-id":"post-content"}):
 	        if str(keyword).lower() in str(i).lower():
-	            c.execute("SELECT post_url FROM Posts WHERE post_url=? and user=?", (url,user,))
+	            c.execute("SELECT post_url FROM Posts WHERE post_url=? and user=? and keyword=?", (url,user,keyword,))
 	            result = c.fetchall()
 	            print(result)
 	            if result:
@@ -202,7 +247,7 @@ def scancomments(keyword, urls, email, alert, user):
 	            index = i.find(keyword)
 	            new = i[index-15:index+15]
 	            print('found in comments') 
-	            c.execute("SELECT comment_id FROM Comment WHERE comment_id=? and user=?", (new,user,))
+	            c.execute("SELECT comment_id FROM Comment WHERE comment_id=? and user=? and keyword=?", (new,user,keyword,))
 	            result = c.fetchall()
 	            print(result)
 	            if result:
